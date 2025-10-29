@@ -22,7 +22,8 @@ public class MapperTests {
     @Test
 
     public void testfindAll(){
-        //  테스트 자동화 우리 서비스에서 사용하는 태그가 빠진게 없는지 확인
+//        테스트 자동화
+//        다이어리 작성 / 수정 서비스를 위한 나라 태그 정보 확인을 통해 배포 자동화 단위 테스트 구현
         List<CountryDTO> all = countryMapper.selectAll();
         assertThat(all.size()).isEqualTo(190);
 
