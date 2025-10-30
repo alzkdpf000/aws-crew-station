@@ -391,6 +391,13 @@ public class MemberServiceImpl implements MemberService {
         return detail;
     }
 
+    //  전체 개수 조회
+    @Override
+    public int getTotalSaleCountByMemberId(Long memberId, Search search) {
+        return memberDAO.selectSaleTotalCount(memberId, search);
+    }
+
+
 
     @Override
     public ModifyDTO getMemberInfo(CustomUserDetails customUserDetails) {

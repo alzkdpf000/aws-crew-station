@@ -203,7 +203,7 @@
     <select id="selectSaleTotalCount" resultType="int">
         SELECT COUNT(*)
         FROM view_post_purchase vpp
-        JOIN tbl_member tm ON tm.id = vpp.member_id
+        JOIN tbl_payment_status tps ON vpp.id = tps.purchase_id
         WHERE vpp.post_status = 'active'
         AND vpp.member_id = #{memberId}
         <include refid="purchaseSearch"/>

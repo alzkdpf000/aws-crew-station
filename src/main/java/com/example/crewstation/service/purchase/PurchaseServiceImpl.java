@@ -78,28 +78,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         return purchaseCriteriaDTO;
     }
 
-//    @Override
-//    @Transactional(rollbackFor = Exception.class)
-//    @Cacheable(value = "purchases", key = "'purchases_' + #postId")
-//    @LogReturnStatus
-//    public PurchaseDTO getPurchase(Long postId) {
-//        purchaseDAO.increaseReadCount(postId);
-//        Optional<PurchaseDTO> purchaseDetail = purchaseDAO.findByPostId(postId);
-//        PurchaseDTO purchaseDTO = purchaseDetail.orElseThrow(PurchaseNotFoundException::new);
-////
-////        List<SectionDTO> sections = sectionDAO.findSectionsByPostId(postId);
-////        sections.forEach(section -> {
-////            section.setFilePath(s3Service.getPreSignedUrl(section.getFilePath(), Duration.ofMinutes(5)));
-////        });
-////
-////        sections.sort(Comparator.comparing(SectionDTO::getImageType));
-////        log.info(sections.toString());
-//        log.info("{}",purchaseDTO.getPrice());
-//        purchaseDTO.setPurchaseProductPrice(PriceUtils.formatMoney(purchaseDTO.getPrice()));
-//        purchaseDTO.setLimitDateTime(DateUtils.calcLimitDateTime(purchaseDTO.getUpdatedDatetime(), purchaseDTO.getPurchaseLimitTime()));
-////        purchaseDTO.setSections(sections);
-//        return purchaseDTO;
-//    }
+
     @Override
     @LogReturnStatus
     public PurchaseDTO getPurchase(Long id) {
@@ -169,15 +148,12 @@ public class PurchaseServiceImpl implements PurchaseService {
             }
 
         });
-        if(redisTemplate.opsForValue().get("gifts") !=null){
-            redisTemplate.delete("gifts");
-        }
+
 
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-//    @CachePut(value = "purchases", key = "'purchases_' + #purchaseDTO.postId")
     @LogReturnStatus
     public PurchaseDTO update(PurchaseDTO purchaseDTO, Long[] deleteFiles, List<MultipartFile> multipartFiles) {
         FileDTO fileDTO = new FileDTO();
@@ -255,21 +231,14 @@ public class PurchaseServiceImpl implements PurchaseService {
         if(purchaseRedisTemplate.opsForValue().get("purchase::purchases_" + purchaseDTO.getPostId()) !=null){
             purchaseRedisTemplate.delete("purchase::purchases_" + purchaseDTO.getPostId());
         }
-        if(redisTemplate.opsForValue().get("gifts") !=null){
-            redisTemplate.delete("gifts");
-        }
         return purchaseDTO;
     }
 
     @Override
-//    @CacheEvict(value = "purchases", key = "'purchases_' + #id")
     public void softDelete(Long id) {
         postDAO.updatePostStatus(id);
         if(purchaseRedisTemplate.opsForValue().get("purchase::purchases_" + id) !=null){
             purchaseRedisTemplate.delete("purchase::purchases_" + id);
-        }
-        if(redisTemplate.opsForValue().get("gifts") !=null){
-            redisTemplate.delete("gifts");
         }
 
     }
@@ -283,12 +252,12 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     // 나의 구매내역 목록 조회
     @Override
-    public PurchaseListCriteriaDTO getPurchaseListByMemberId(Long memberId, ScrollCriteria scrollcriteria, Search search) {
+    public PurchaseListCriteriaDTO getPurchaseListByMemberId(Long memberId, Criteria criteria, Search search) {
 
-        List<PurchaseListDTO> list = purchaseDAO.selectPurchaseList(memberId, scrollcriteria, search);
+        List<PurchaseListDTO> list = purchaseDAO.selectPurchaseList(memberId, criteria, search);
 
         int total = purchaseDAO.selectTotalCount(memberId, search);
-        scrollcriteria.setTotal(total);
+        criteria.setTotal(total);
 
         // S3 presigned URL 변환
         list.forEach(dto -> {
@@ -307,11 +276,17 @@ public class PurchaseServiceImpl implements PurchaseService {
         // 결과 DTO 구성
         PurchaseListCriteriaDTO result = new PurchaseListCriteriaDTO();
         result.setPurchaseListDTOs(list);
-        result.setScrollcriteria(scrollcriteria);
+        result.setCriteria(criteria);
         result.setSearch(search);
 
         log.info("result.getPurchaseListDTOs() = {}", result.getPurchaseListDTOs());
         return result;
+    }
+
+    //  전체 개수 조회
+    @Override
+    public int getTotalCountByMemberId(Long memberId, Search search) {
+        return purchaseDAO.selectTotalCount(memberId, search);
     }
 
 

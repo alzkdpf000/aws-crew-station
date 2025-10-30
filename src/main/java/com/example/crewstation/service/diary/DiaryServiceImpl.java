@@ -237,8 +237,7 @@ public class DiaryServiceImpl implements DiaryService {
                 log.info("{}::::", diary);
                 log.info(":::::::{}", likeDAO.isLikeByPostIdAndMemberId(diary));
             }
-//            diary.setUserId(1L); // 임시
-//            diary.setLikeId(likeDAO.isLikeByPostIdAndMemberId(diary));
+
             diary.setFileCount(sectionDAO.findSectionFileCount(diary.getPostId()));
         });
         criteria.setHasMore(diaries.size() > criteria.getRowCount());
@@ -318,9 +317,7 @@ public class DiaryServiceImpl implements DiaryService {
         List<PostFileTagDTO> postFileTagDTOs = null;
 
 
-//        post.setPostTitle(request.getPostTitle());
-//        post.setMemberId(request.getMemberId());
-//        post.setSecret(request.isSecret() ? Secret.PRIVATE : Secret.PUBLIC);
+
         diaryDAO.updateSecret(request.getPostId(), request.isSecret() ? Secret.PRIVATE : Secret.PUBLIC);
         log.info("{}", toPostVO(request));
         postDAO.update(toPostVO(request));
@@ -423,7 +420,6 @@ public class DiaryServiceImpl implements DiaryService {
 
         Optional.ofNullable(request.getOldImages()).orElse(Collections.emptyList())
                 .forEach(image -> {
-//                    image.getPostSectionId()
                     if (image.getFileId() == -1 && image.getImage() != null) {
                         MultipartFile file = image.getImage();
                         try {
@@ -459,7 +455,6 @@ public class DiaryServiceImpl implements DiaryService {
                     } else {
                         sectionDAO.update(toPostSectionVO(image));
                         if (image.getTags() != null) {
-//                log.info("태그가 없어");
                             image.getTags().forEach((tag) -> {
                                 log.info("태그 추가되빈다.");
                                 tag.setPostSectionFileId(image.getFileId());
@@ -477,9 +472,6 @@ public class DiaryServiceImpl implements DiaryService {
             log.info("신규 ::::{}", request.getNewThumbnail());
             filePostSectionDAO.updateImageTypeByFileId(request.getThumbnail(), Type.SUB);
             filePostSectionDAO.updateImageTypeByFileId(request.getNewThumbnail(), Type.MAIN);
-        }
-        if (redisTemplate.opsForValue().get("diaries") != null) {
-            redisTemplate.delete("diaries");
         }
         if (diaryRedisTemplate.opsForValue().get("diary::diary_" + request.getPostId()) != null) {
             log.info("askladamdakldamlkdalmd");
@@ -583,9 +575,7 @@ public class DiaryServiceImpl implements DiaryService {
                 throw new RuntimeException(e);
             }
         });
-        if (redisTemplate.opsForValue().get("diaries") != null) {
-            redisTemplate.delete("diaries");
-        }
+
 
     }
 
@@ -639,9 +629,7 @@ public class DiaryServiceImpl implements DiaryService {
             throw new PostNotFoundException("이미 삭제된 게시글입니다.");
         }
         diaryDAO.updateSecret(diaryId, secret);
-        if (redisTemplate.opsForValue().get("diaries") != null) {
-            redisTemplate.delete("diaries");
-        }
+
         return message;
     }
 
@@ -656,9 +644,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     public void deleteDiary(Long postId) {
         postDAO.updatePostStatus(postId);
-        if (redisTemplate.opsForValue().get("diaries") != null) {
-            redisTemplate.delete("diaries");
-        }
+
     }
 
     public String getPath() {
