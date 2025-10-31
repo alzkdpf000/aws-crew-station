@@ -7,6 +7,7 @@ import com.example.crewstation.dto.diary.DiaryDTO;
 import com.example.crewstation.dto.diary.DiaryDetailDTO;
 import com.example.crewstation.dto.gift.GiftDTO;
 import com.example.crewstation.dto.member.MemberProfileDTO;
+import com.example.crewstation.dto.member.MyPurchaseDetailDTO;
 import com.example.crewstation.dto.purchase.PurchaseDTO;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -178,6 +179,23 @@ public class RedisConfig {
         // Value는 Map<String, Long> 전용 직렬화
         GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer();
         template.setValueSerializer(serializer);
+
+        template.afterPropertiesSet();
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<String, MyPurchaseDetailDTO> myPurchaseDetailRedisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, MyPurchaseDetailDTO> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+
+        Jackson2JsonRedisSerializer<MyPurchaseDetailDTO> serializer =
+                new Jackson2JsonRedisSerializer<>(MyPurchaseDetailDTO.class);
+
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(serializer);
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(serializer);
 
         template.afterPropertiesSet();
         return template;

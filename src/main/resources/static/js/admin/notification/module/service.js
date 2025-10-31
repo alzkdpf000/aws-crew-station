@@ -18,25 +18,21 @@ const noticeService = (() => {
     };
 
     // 공지 작성
-    // noticeService.save
     const save = async (title, content) => {
         try {
             const res = await fetch("/api/admin/notices", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ title, content }),
-                credentials: "include", // 쿠키(JWT) 쓰면 붙이는 게 안전
+                credentials: "include",
             });
 
-            // 디버깅 로그
             console.log("[NOTICE SAVE] status:", res.status);
 
-            // 성공 범위를 넓게: 200, 201, 204 모두 성공 처리
             if (res.status === 200 || res.status === 201 || res.status === 204) {
                 return true;
             }
 
-            // 혹시 302 같은 리다이렉트가 오면 여기로
             const text = await res.text();
             console.error("공지 작성 실패 응답:", res.status, text);
             return false;

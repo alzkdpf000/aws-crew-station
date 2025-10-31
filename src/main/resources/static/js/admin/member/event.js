@@ -63,8 +63,9 @@
         }
     });
 
-    //  초기 로딩
     document.addEventListener("DOMContentLoaded", () => {
-        showMembers(1, "");
+        setTimeout(() => {
+            showMembers(1, "");
+        }, 400);
     });
 })();

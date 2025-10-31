@@ -8,6 +8,7 @@ import com.example.crewstation.util.Criteria;
 import com.example.crewstation.util.Search;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -74,12 +75,14 @@ public class MemberDAO {
     }
 
 //    관리자 회원 목록
-    public List<MemberDTO> findAdminMembers(Search search, int limit, int offset){
+    public List<MemberDTO> findAdminMembers(@Param("search") Search search,
+                                            @Param("limit") int limit,
+                                            @Param("offset") int offset){
         return memberMapper.findAdminMembers(search, limit, offset);
     }
 
 //    회원 수
-    public int countAdminMembers(Search search) {
+    public int countAdminMembers(@Param("search") Search search) {
         return memberMapper.countAdminMembers(search);
     }
 

@@ -14,6 +14,7 @@ window.closeAllLayerUIs = function () {
 window.inquiryInit = async function () {
     console.log('[inquiryInit] 실행됨');
 
+
     window.inquireInited = true;
 
     await new Promise(r => requestAnimationFrame(() => setTimeout(r, 80)));

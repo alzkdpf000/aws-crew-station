@@ -63,8 +63,8 @@ public class AdminRestController implements AdminRestControllerDocs{
     private final AccompanyService accompanyService;
 
     //    관리자 회원 목록
-    @PostMapping("/members")
-    public ResponseEntity<MemberCriteriaDTO> getMembers(@RequestBody Search search) {
+    @GetMapping("/members")
+    public ResponseEntity<MemberCriteriaDTO> getMembers(@ModelAttribute Search search) {
         return ResponseEntity.ok(memberService.getMembers(search));
     }
 

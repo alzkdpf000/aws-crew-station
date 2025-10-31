@@ -108,7 +108,7 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentResponseDTO;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void completePayment(Long paymentStatusId, PaymentDTO paymentDTO) {
 

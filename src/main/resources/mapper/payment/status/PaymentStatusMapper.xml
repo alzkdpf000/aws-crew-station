@@ -77,7 +77,7 @@
         to_char(p.created_datetime, 'YYYY-MM-DD HH24:MI:SS') as paidAt,
         to_char(p.updated_datetime, 'YYYY-MM-DD HH24:MI:SS') as updatedDatetime,
 
-        vpp.post_title                      as productName,  <!-- ✅ 하나만 남김 -->
+        vpp.post_title                      as productName,
         coalesce(vpp.purchase_product_price, 0) * coalesce(vpp.purchase_product_count, 0) as amount,
 
         b.member_name                       as buyerName,

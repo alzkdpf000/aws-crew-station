@@ -20,7 +20,11 @@ const crewReportService = (() => {
 
     const processReport = async (reportId, postId, hidePost = false) => {
         try {
-            const url = `/api/admin/accompanies/${reportId}/process?postId=${postId ?? ''}&hidePost=${hidePost}`;
+            const params = new URLSearchParams({
+                postId: postId ?? '',
+                hidePost: hidePost
+            });
+            const url = `/api/admin/accompanies/${reportId}/process?${params.toString()}`;
             const res = await fetch(url, {
                 method: 'POST',
                 credentials: 'include',

@@ -122,6 +122,7 @@
         tm.created_datetime,
         tm.updated_datetime,
         tm.chemistry_score
+
         from tbl_member tm
         <where>
             <if test="search.keyword != null || search.keyword != ''">
