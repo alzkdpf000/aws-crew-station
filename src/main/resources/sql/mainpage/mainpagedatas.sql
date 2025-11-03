@@ -1338,7 +1338,10 @@ values (20,52);
 
 
 insert into tbl_country(country_name)
-values ('유럽');
+values ('프랑스');
+
+insert into tbl_diary_country(country_id)
+values ( '30');
 
 insert into tbl_accompany(post_id, accompany_status, accompany_age_range)
 values ('50','short','20');
@@ -1346,6 +1349,69 @@ values ('50','short','20');
 
 insert into tbl_accompany_path (country_start_date, country_end_date, accompany_id, country_id)
 values ('2014-10-8', '2025-10-10', '35', '26');
+
+select * from tbl_country;
+
+select * from tbl_diary_country;
+
+BEGIN;
+ROLLBACK;
+select * from tbl_post;
+
+ALTER TABLE tbl_diary_country DISABLE TRIGGER ALL;
+
+insert into tbl_member (member_email, member_password, member_name)
+values ('dummy@crewstation.com', '1234', 'Dummy Member');
+
+insert into tbl_member (id, member_email, member_password, member_name)
+    overriding system value
+values (1, 'dummy@crewstation.com', '1234', 'Dummy Member');
+
+-- 임시 더미 데이터 삽입
+insert into tbl_diary_country (post_id, country_id)
+values
+    (1, 30), (2, 31), (3, 32), (4, 33), (5, 34);
+
+ALTER TABLE tbl_diary_country ENABLE TRIGGER ALL;
+
+ROLLBACK; -- ❌ 변경사항 전부 취소 (테이블 구조 포함)
+
+
+-- diary에 더미 추가
+insert into tbl_diary (post_id, diary_secret)
+values (1, 'public'), (2, 'public'), (3, 'public'), (4, 'public'), (5, 'public'), (6, 'public');
+
+-- diary_country 더미
+insert into tbl_diary_country (post_id, country_id)
+values (1, 30), (2, 31), (3, 32), (4, 33), (5, 34), (6, 35);
+
+
+insert into tbl_member (member_email, member_password, member_name)
+values ('dummy2@crewstation.com', '1234', 'Dummy Member2');
+
+insert into tbl_post (post_title, member_id)
+values
+    ('Japan Trip', 2),
+    ('Korea Trip', 2),
+    ('France Trip', 2),
+    ('USA Trip', 2),
+    ('Thailand Trip', 2),
+    ('Australia Trip', 2);
+
+insert into tbl_diary_country_path (country_start_date, country_end_date, member_id)
+values ('2025-01-01', '2025-01-10', 2);
+
+select * from tbl_diary;
+insert into tbl_diary_country (post_id, country_id)
+values
+    (42, 19),
+    (2, 22),
+    (21, 24),
+    (22, 25),
+    (19, 26),
+    (20, 27);
+
+select * from tbl_diary_country;
 
 
 
