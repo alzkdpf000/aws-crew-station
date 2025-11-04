@@ -65,6 +65,7 @@
 | **Database**    | PostgreSQL, Redis |
 | **Infra**       | AWS EC2, AWS IAM, AWS S3 |
 | **Tool**        | VS Code, IntelliJ IDEA |
+| **CI/CD & Container** | Docker, GitHub Actions |
 | **API**         | Kakao Login, Kakao Map, Kakao 주소, SMTP Gmail API, REST API, Lombok, MyBatis, OAuth 2.0, Google Login, Boot Pay, Naver Login, JWT, Spring Security, CoolSMS, Swagger UI |
 | **기타**        | Git, GitHub, Slack, Postman, Sourcetree |
 | **테스트**      | JUnit5 |
